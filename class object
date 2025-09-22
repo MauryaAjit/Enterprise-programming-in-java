@@ -1,0 +1,19 @@
+class parul_1{
+  //wrapper
+  pulic static void main(string[]args){
+     //wrapper class
+     //bite b=12;
+     //short sh=34;
+     //int a=12;
+     //long l=4545454545l;
+     //float f=34343.3434f;
+     //double d=345434.454545;
+     //char ch='  ';
+     //boolean bool= true;
+     
+     
+     //boxing
+     
+     //Integer
+     }
+}
