@@ -1,0 +1,104 @@
+ChatServer.java
+import java.io.*;
+import java.net.*;
+
+public class ChatServer {
+    public static void main(String[] args) {
+        try {
+            // Step 1: Create ServerSocket on port 5000
+            ServerSocket serverSocket = new ServerSocket(5000);
+            System.out.println("Server started. Waiting for client...");
+
+            // Step 2: Accept client connection
+            Socket socket = serverSocket.accept();
+            System.out.println("Client connected!");
+
+            // Step 3: Setup input and output streams
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+            // Step 4: Setup console reader for server input
+            BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+
+            String clientMsg, serverMsg;
+
+            // Step 5: Chat loop
+            while (true) {
+                clientMsg = in.readLine();
+                if (clientMsg == null || clientMsg.equalsIgnoreCase("exit")) {
+                    System.out.println("Client disconnected.");
+                    break;
+                }
+                System.out.println("Client: " + clientMsg);
+
+                System.out.print("Server: ");
+                serverMsg = consoleInput.readLine();
+                out.println(serverMsg);
+
+                if (serverMsg.equalsIgnoreCase("exit")) {
+                    break;
+                }
+            }
+
+            // Step 6: Close resources
+            socket.close();
+            serverSocket.close();
+            in.close();
+            out.close();
+            consoleInput.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+ChatClient.java
+import java.io.*;
+import java.net.*;
+
+public class ChatClient {
+    public static void main(String[] args) {
+        try {
+            // Step 1: Connect to server on localhost:5000
+            Socket socket = new Socket("localhost", 5000);
+            System.out.println("Connected to server!");
+
+            // Step 2: Setup input and output streams
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+            // Step 3: Setup console reader for client input
+            BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+
+            String clientMsg, serverMsg;
+
+            // Step 4: Chat loop
+            while (true) {
+                System.out.print("Client: ");
+                clientMsg = consoleInput.readLine();
+                out.println(clientMsg);
+
+                if (clientMsg.equalsIgnoreCase("exit")) {
+                    break;
+                }
+
+                serverMsg = in.readLine();
+                if (serverMsg == null || serverMsg.equalsIgnoreCase("exit")) {
+                    System.out.println("Server disconnected.");
+                    break;
+                }
+                System.out.println("Server: " + serverMsg);
+            }
+
+            // Step 5: Close resources
+            socket.close();
+            in.close();
+            out.close();
+            consoleInput.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
